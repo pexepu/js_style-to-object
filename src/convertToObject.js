@@ -1,31 +1,29 @@
 'use strict';
 
-/**
- * @param {string} sourceString
- *
- * @return {object}
- */
 function convertToObject(sourceString) {
-  const stylePairs = sourceString
-    .split(';')
-    .map((item) => item.trim())
-    .filter((item) => item !== '')
-    .map((item) => item.split(':'));
-
   const stylesObject = {};
 
-  const callback = (pair) => {
-    if (!pair[0] || !pair[1]) {
+  const declarations = sourceString
+    .split(';')
+    .map((line) => line.trim())
+    .filter((line) => line !== '');
+
+  declarations.forEach((declaration) => {
+    const colonIndex = declaration.indexOf(':');
+
+    if (colonIndex === -1) {
       return;
     }
 
-    const property = pair[0].trim();
-    const value = pair[1].trim();
+    const property = declaration.slice(0, colonIndex).trim();
+    const value = declaration.slice(colonIndex + 1).trim();
+
+    if (!property || !value) {
+      return;
+    }
 
     stylesObject[property] = value;
-  };
-
-  stylePairs.forEach(callback);
+  });
 
   return stylesObject;
 }
