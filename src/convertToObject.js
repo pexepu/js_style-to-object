@@ -15,6 +15,10 @@ function convertToObject(sourceString) {
   const stylesObject = {};
 
   const callback = (pair) => {
+    if (!pair[0] || !pair[1]) {
+      return;
+    }
+
     const property = pair[0].trim();
     const value = pair[1].trim();
 
